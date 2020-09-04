@@ -1,0 +1,13 @@
+.todo {
+    margin: 5%;
+} 
+
+.CardBody {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.CardBody > *:first-child {
+    margin-right: 20px;
+} 

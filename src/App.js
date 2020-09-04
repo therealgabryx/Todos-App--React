@@ -1,16 +1,44 @@
+// General imports
 import React, { useState, useRef, useEffect } from 'react';
-import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid'
+// Shards React
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'shards-ui/dist/css/shards.min.css';
+
+// Components
+import Info from './Info';
+import Buttons from './Buttons';
+import TodoList from './TodoList';
+
+// Shards Components
+import { Navbar, NavbarBrand } from 'shards-react';
+
+import './Todo.css';
 
 const LOCAL_STORAGE_KEY = 'todoApp.todos'
 
+const sampleItems = [
+  { id: uuidv4(), name: 'learn React', complete: true }, 
+  { id: uuidv4(), name: 'build a simple todo app', complete: true }, 
+  { id: uuidv4(), name: 'deploy App to firebase hosting', complete: true }, 
+  { id: uuidv4(), name: 'learn redux', complete: false }, 
+  { id: uuidv4(), name: 'create a twitter clone', complete: false } 
+]
+/* localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(sampleItems)) */
+
 function App() { 
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([]); 
+
   const todoNameRef = useRef();
 
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (storedTodos) setTodos(storedTodos);
+    if (storedTodos.length !== 0) { 
+      setTodos(storedTodos);
+    } 
+    else { 
+      setTodos(sampleItems);
+    }
   }, []); 
 
   useEffect(() => {
@@ -29,7 +57,7 @@ function App() {
     if (todoName === '') return;
 
     setTodos(prevTodos => {
-      return [...prevTodos, { id: uuidv4(), name: todoName, complete: false }] 
+      return [{ id: uuidv4(), name: todoName, complete: false }, ...prevTodos] 
     });
     todoNameRef.current.value = null;
   }  
@@ -41,13 +69,16 @@ function App() {
 
   return (
     <> 
-      <TodoList todos={todos} toggleTodo={toggleTodo}/>
-      <input ref={todoNameRef} type="text"></input>
-      <button onClick={handleAddTodo}>Add Todo</button>
-      <button onClick={handleClearTodos}>Clear Completed</button>
-      <div>{todos.filter(todo => !todo.complete).length} left to do</div> 
+      <Navbar type="dark" theme="primary">
+        <NavbarBrand> 
+          <strong>React Todos App</strong>
+        </NavbarBrand>
+      </Navbar>
+      <Info todosQty={todos.filter(todo => !todo.complete).length}></Info> 
+      <Buttons todoNameRef={todoNameRef} handleAddTodo={handleAddTodo} handleClearTodos={handleClearTodos}></Buttons>
+      <TodoList todos={todos} toggleTodo={toggleTodo}/>  
     </>
   );
-}
+}  
 
 export default App;
