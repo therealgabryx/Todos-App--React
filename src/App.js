@@ -15,7 +15,8 @@ import { Navbar, NavbarBrand } from 'shards-react';
 
 import './Todo.css';
 
-const LOCAL_STORAGE_KEY = 'todoApp.todos'
+const LOCAL_STORAGE_KEY = 'todoApp.todos';
+localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([]));
 
 const sampleItems = [
   { id: uuidv4(), name: 'learn React', complete: true }, 
